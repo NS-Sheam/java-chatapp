@@ -1,5 +1,6 @@
 package chatapp;
 
+import static chatapp.Server.f;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -15,6 +16,7 @@ public class Client implements ActionListener {
     static JPanel a1;
     static Box vertical = Box.createVerticalBox();
     static DataOutputStream dout;
+    boolean isDarkTheme = false;
     
     static JFrame f = new JFrame();
 
@@ -41,12 +43,18 @@ public class Client implements ActionListener {
             }
         });
 
-        ImageIcon i4 = new ImageIcon(ClassLoader.getSystemResource("icons/2.png"));
+        ImageIcon i4 = new ImageIcon(ClassLoader.getSystemResource("icons/sakib.png"));
         Image i5 = i4.getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT);
         ImageIcon i6 = new ImageIcon(i5);
         JLabel profile = new JLabel(i6);
         profile.setBounds(40, 10, 50, 50);
         p1.add(profile);
+        
+        JToggleButton themeToggle = new JToggleButton("Dark");
+        themeToggle.setBounds(200, 20, 80, 25);
+        themeToggle.setFont(new Font("SAN_SERIF", Font.PLAIN, 14));
+        themeToggle.addActionListener(e -> toggleTheme(themeToggle));
+        p1.add(themeToggle);
 
         ImageIcon i7 = new ImageIcon(ClassLoader.getSystemResource("icons/video.png"));
         Image i8 = i7.getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT);
@@ -103,6 +111,31 @@ public class Client implements ActionListener {
         f.setUndecorated(true);
         f.getContentPane().setBackground(Color.WHITE);
         f.setVisible(true);
+    }
+    
+    public void toggleTheme(JToggleButton themeToggle) {
+        isDarkTheme = !isDarkTheme;
+        themeToggle.setText(isDarkTheme ? "Light" : "Dark");
+        themeToggle.setForeground(isDarkTheme ? Color.white : Color.BLACK);
+          themeToggle.setBackground(isDarkTheme ? Color.BLACK : Color.WHITE);
+        
+        applyTheme();
+    }
+
+    // Apply selected theme to the components
+    public void applyTheme() {
+        if (isDarkTheme) {
+            f.getContentPane().setBackground(Color.DARK_GRAY);
+            a1.setBackground(Color.GRAY);
+            text.setBackground(Color.BLACK);
+            text.setForeground(Color.WHITE);
+        } else {
+            f.getContentPane().setBackground(Color.WHITE);
+            a1.setBackground(Color.LIGHT_GRAY);
+            text.setBackground(Color.WHITE);
+            text.setForeground(Color.BLACK);
+        }
+        f.repaint();
     }
 
     public void actionPerformed(ActionEvent ae) {

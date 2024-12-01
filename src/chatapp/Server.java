@@ -16,6 +16,8 @@ public class Server implements ActionListener {
     static Box vertical = Box.createVerticalBox();
     static JFrame f = new JFrame();
     static DataOutputStream dout;
+    boolean isDarkTheme = false;
+    
 
     Server() {
 
@@ -40,12 +42,18 @@ public class Server implements ActionListener {
             }
         });
 
-        ImageIcon i4 = new ImageIcon(ClassLoader.getSystemResource("icons/1.png"));
+        ImageIcon i4 = new ImageIcon(ClassLoader.getSystemResource("icons/uzzwal.png"));
         Image i5 = i4.getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT);
         ImageIcon i6 = new ImageIcon(i5);
         JLabel profile = new JLabel(i6);
         profile.setBounds(40, 10, 50, 50);
         p1.add(profile);
+        
+        JToggleButton themeToggle = new JToggleButton("Dark");
+        themeToggle.setBounds(200, 20, 80, 25);
+        themeToggle.setFont(new Font("SAN_SERIF", Font.PLAIN, 14));
+        themeToggle.addActionListener(e -> toggleTheme(themeToggle));
+        p1.add(themeToggle);
 
         ImageIcon i7 = new ImageIcon(ClassLoader.getSystemResource("icons/video.png"));
         Image i8 = i7.getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT);
@@ -68,7 +76,7 @@ public class Server implements ActionListener {
         morevert.setBounds(420, 20, 10, 25);
         p1.add(morevert);
 
-        JLabel name = new JLabel("Gaitonde");
+        JLabel name = new JLabel("Uzzwal");
         name.setBounds(110, 15, 100, 18);
         name.setForeground(Color.WHITE);
         name.setFont(new Font("SAN_SERIF", Font.BOLD, 18));
@@ -103,6 +111,31 @@ public class Server implements ActionListener {
         f.getContentPane().setBackground(Color.WHITE);
         f.setVisible(true);
     }
+     public void toggleTheme(JToggleButton themeToggle) {
+        isDarkTheme = !isDarkTheme;
+        themeToggle.setText(isDarkTheme ? "Light" : "Dark");
+        themeToggle.setForeground(isDarkTheme ? Color.WHITE : Color.BLACK);
+        themeToggle.setBackground(isDarkTheme ? Color.BLACK : Color.WHITE);
+        
+        applyTheme();
+    }
+
+    // Apply selected theme to the components
+    public void applyTheme() {
+        if (isDarkTheme) {
+            f.getContentPane().setBackground(Color.DARK_GRAY);
+            a1.setBackground(Color.GRAY);
+            text.setBackground(Color.BLACK);
+            text.setForeground(Color.WHITE);
+        } else {
+            f.getContentPane().setBackground(Color.WHITE);
+            a1.setBackground(Color.LIGHT_GRAY);
+            text.setBackground(Color.WHITE);
+            text.setForeground(Color.BLACK);
+        }
+        f.repaint();
+    }
+
 
     public void actionPerformed(ActionEvent ae) {
         try {
@@ -167,6 +200,7 @@ public class Server implements ActionListener {
                 while (true) {
                     String msg = din.readUTF();
                     JPanel panel = formatLabel(msg);
+                    
 
                     JPanel left = new JPanel(new BorderLayout());
                     left.add(panel, BorderLayout.LINE_START);
